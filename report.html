@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSW — Assessment Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/helvetica-neue-55" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  :root {
+    --sm: 'Space Mono', 'Courier New', monospace;
+    --hv: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --blue: #76A9E8;
+    --blue-border: rgba(118,169,232,0.3);
+  }
+
+  @page {
+    size: 5.5in 8.5in;
+    margin: 0;
+  }
+
+  /* ── SCREEN ── */
+  @media screen {
+    html, body {
+      background: #000;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      opacity: 0;
+    }
+
+    .bsw-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: #1c1c1c;
+      border-bottom: 1px solid var(--blue-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      z-index: 100;
+    }
+    .bsw-header .logo-img {
+      height: 30px;
+      width: auto;
+      cursor: pointer;
+    }
+    .bsw-header .clock {
+      font-family: var(--sm);
+      font-size: 15px;
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+
+    .screen-actions {
+      display: flex;
+      justify-content: center;
+      padding: calc(60px + 32px) 0 24px;
+    }
+    .sc-btn {
+      background: transparent;
+      border: 1.5px solid var(--blue);
+      color: var(--blue);
+      font-family: var(--sm);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 28px;
+      cursor: pointer;
+    }
+    .sc-btn:hover { background: var(--blue); color: #000; }
+
+    .card-wrap {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 60px;
+    }
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .bsw-header, .screen-actions { display: none !important; }
+    html, body { width: 5.5in; height: 8.5in; margin: 0; overflow: hidden; }
+    .card-wrap { display: block; padding: 0; }
+  }
+
+  /* ══════════════════════════════════════
+     REPORT CARD
+  ══════════════════════════════════════ */
+  #report-card {
+    width: 5.5in;
+    height: 8.5in;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+  }
+  @media screen {
+    #report-card {
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    }
+  }
+  @media print {
+    #report-card {
+      position: fixed;
+      top: 0; left: 0;
+    }
+  }
+
+  /* ── SVG TEMPLATE BACKGROUND ── */
+  .rc-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  /* ── INFO TABLE VALUES ──
+     Positions derived from SVG coord space (1650 × 2550).
+     Row label paths start at x≈91–106; values sit just after.
+     Row y centres from path anchor points.
+  ── */
+  /* 56.17 SVG units × (528/1650) = 17.97px ≈ 18px
+     x per row = label_start_x + label_width + 30 SVG units (≈9.6px) */
+  .rc-val {
+    position: absolute;
+    font-family: var(--sm);
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  /* ── WORTH SCORE (right panel) ──
+     241.03 SVG units × 0.32 = 77.13px
+     Right panel: x 55.8%→96.6%, y 16.5%→41.5%
+     Centre: left 76.2%, top 29%
+  ── */
+  .rc-score-val {
+    position: absolute;
+    font-family: var(--sm);
+    font-size: 77px;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: -0.03em;
+    -webkit-text-stroke: 3.25px #000;
+    line-height: 1;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  /* ── METRIC VALUES ──
+     40.58 SVG units × 0.32 = 12.99px ≈ 13px
+     Left column aligned at 484 SVG units = 484/1650 = 29.33%
+  ── */
+  .rc-mval-ov {
+    position: absolute;
+    font-family: var(--sm);
+    font-size: 13px;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: 0.01em;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  /* ── BAR WRAPPER ──
+     Aligned to bar-track rects in the SVG:
+       x = 869.081 / 1650 = 52.67%
+       w = 725.052 / 1650 = 43.94%
+       h = 27.1047 / 2550 = 1.063%
+  ── */
+  .rc-bar-wrap {
+    position: absolute;
+    left: 52.67%;
+    width: 43.94%;
+    /* Exactly match SVG rect height: 27.1047/2550 = 1.063% */
+    height: 1.063%;
+  }
+
+  /* Current-value label floats above bar */
+  .rc-lbl-ov {
+    position: absolute;
+    bottom: calc(108% + 1px);
+    left: 0%;          /* overridden by JS */
+    font-family: var(--sm);
+    font-size: 7px;
+    font-weight: 400;
+    color: #000;
+    transform: translate(-50%, 1px);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* Bar fill — 3px black border, same height as wrapper so strokes overlap exactly */
+  .rc-bar-fill {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 0%;
+    background: #8f8f8f;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  </style>
+</head>
+<body data-page="report">
+
+  <!-- Screen chrome -->
+  <header class="bsw-header">
+    <img class="logo-img" src="assets/Logo/Wordmark_Single_B.svg" alt="Bureau of Statistical Worth">
+    <div class="clock" id="clock">00:00:00 EST</div>
+  </header>
+
+  <div class="screen-actions">
+    <button id="receive-btn" class="sc-btn">Receive Card</button>
+  </div>
+
+  <div class="card-wrap" id="report-content">
+    <div id="report-card">
+
+      <!-- ── TEMPLATE BACKGROUND ── -->
+      <img class="rc-bg" src="Assets/Report Card/RC_Template__.svg" alt="">
+
+      <!-- ── INFO TABLE: left-column values ──
+           y positions from SVG label path anchors (/2550 → card %)
+           x positions estimated from label widths in SVG coordinate space
+      ── -->
+      <!-- INFO TABLE: left-column values
+           y = label path anchor / 2550 (card %)
+           x = label_start_px + label_width_px + 9.6px (30 SVG units)
+               all converted to % of 528px card width
+           Label font est. ~40 SVG units = 13px CSS → 0.6×13 = 7.8px/char (Space Mono)
+      -->
+      <!-- ID: down 3px, left 2px from original 11.8%/17.18% -->
+      <span class="rc-val" id="report-case-id" style="left:calc(11.8% - 2px);top:calc(17.18% + 3px)">—</span>
+
+      <!-- RACE: left 2px -->
+      <span class="rc-val" id="report-race" style="left:calc(15.5% - 2px);top:22.04%">—</span>
+
+      <!-- AGE: up 2px -->
+      <span class="rc-val" id="report-age" style="left:14.1%;top:calc(26.55% - 2px)">—</span>
+
+      <!-- SEX: up 3px total (1+2), left 2px -->
+      <span class="rc-val" id="report-sex" style="left:calc(13.4% - 2px);top:calc(31.10% - 3px)">—</span>
+
+      <!-- ZIP CODE: up 5px total (2+3), left 2px -->
+      <span class="rc-val" id="report-zip" style="left:calc(20.7% - 2px);top:calc(35.88% - 5px)">—</span>
+
+      <!-- PARENTS' INCOME: flush to SVG "$", down 7px total -->
+      <span class="rc-val" id="report-parent-income" style="left:7.8%;top:calc(41.1% + 7.5px)">—</span>
+
+      <!-- ── WORTH SCORE ──
+           up 2px, left 3px from 76.2%/29%
+           transform:translate(-50%,-50%) centres the text on that point
+      ── -->
+      <div class="rc-score-val" id="val-worth" style="left:calc(76.2% - 3px);top:calc(29% - 2px)">—</div>
+
+      <!-- ── EMOTICON MOUTH ──
+           Circle + eyes are baked into RC_Template__.svg.
+           Overlay just the mouth path in a matching viewBox.
+           SVG emoticon: cx=1538.3 cy=445.456 r=35.802
+             left  = (1538.3 - 35.802) / 1650 = 91.06%
+             top   = (445.456 - 35.802) / 2550 = 16.06%
+             width = (35.802 × 2) / 1650       = 4.34%
+             height= (35.802 × 2) / 2550       = 2.81%
+      ── -->
+      <svg style="position:absolute;left:91.06%;top:16.06%;width:4.34%;height:2.81%;overflow:visible"
+           viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="emoticon-mouth"
+              d="M6.88 14.37 C7.41 15.37 8.79 17.35 11.13 17.35 C13.45 17.35 14.79 15.37 15.16 14.37"
+              stroke="#000" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+
+      <!-- ── METRIC VALUES & BAR FILLS ──
+           Bar track x = 52.67%, width = 43.94%, height = 1.063%
+           Bar top-y positions from SVG rect y-coords / 2550
+           Metric value spans vertically centred at bar mid-y
+      ── -->
+
+      <!-- SAT SCORE  bar top: 1324.12/2550=51.93%  mid: 52.46% -->
+      <span class="rc-mval-ov" id="val-sat"  style="left:29.33%;top:52.46%">—</span>
+      <div class="rc-bar-wrap"               style="top:51.93%">
+        <span class="rc-lbl-ov" id="lbl-sat"></span>
+        <div  class="rc-bar-fill" id="bar-sat"></div>
+      </div>
+
+      <!-- IQ  bar top: 1425.76/2550=55.91%  mid: 56.44% -->
+      <span class="rc-mval-ov" id="val-iq"   style="left:29.33%;top:56.44%">—</span>
+      <div class="rc-bar-wrap"               style="top:55.91%">
+        <span class="rc-lbl-ov" id="lbl-iq"></span>
+        <div  class="rc-bar-fill" id="bar-iq"></div>
+      </div>
+
+      <!-- ANNUAL INCOME  bar top: 1527.40/2550=59.90%  mid: 60.43% -->
+      <span class="rc-mval-ov" id="val-income" style="left:29.33%;top:60.43%">—</span>
+      <div class="rc-bar-wrap"                 style="top:59.90%">
+        <span class="rc-lbl-ov" id="lbl-income"></span>
+        <div  class="rc-bar-fill" id="bar-income"></div>
+      </div>
+
+      <!-- CREDIT SCORE  bar top: 1629.05/2550=63.88%  mid: 64.42% -->
+      <span class="rc-mval-ov" id="val-credit" style="left:29.33%;top:64.42%">—</span>
+      <div class="rc-bar-wrap"                 style="top:63.88%">
+        <span class="rc-lbl-ov" id="lbl-credit"></span>
+        <div  class="rc-bar-fill" id="bar-credit"></div>
+      </div>
+
+      <!-- CRIME RISK  bar top: 1730.69/2550=67.87%  mid: 68.40% -->
+      <span class="rc-mval-ov" id="val-crime" style="left:29.33%;top:68.40%">—</span>
+      <div class="rc-bar-wrap"                style="top:67.87%">
+        <span class="rc-lbl-ov" id="lbl-crime"></span>
+        <div  class="rc-bar-fill" id="bar-crime"></div>
+      </div>
+
+      <!-- LIFE EXPECTANCY  bar top: 1832.33/2550=71.86%  mid: 72.39% -->
+      <span class="rc-mval-ov" id="val-life" style="left:29.33%;top:72.39%">—</span>
+      <div class="rc-bar-wrap"               style="top:71.86%">
+        <span class="rc-lbl-ov" id="lbl-life"></span>
+        <div  class="rc-bar-fill" id="bar-life"></div>
+      </div>
+
+      <!-- LIFETIME INCOME  bar top: 1937.36/2550=75.98%  mid: 76.50% -->
+      <span class="rc-mval-ov" id="val-projected" style="left:calc(29.33% + 0px);top:calc(76.50% + 0px)">—</span>
+      <div class="rc-bar-wrap"                     style="top:75.98%">
+        <span class="rc-lbl-ov" id="lbl-projected" style="transform:translate(calc(-50% + 4.5px), 0px)"></span>
+        <div  class="rc-bar-fill" id="bar-projected"></div>
+      </div>
+
+      <!-- NO. OF CHILDREN  bar top: 2042.39/2550=80.09%  mid: 80.62% -->
+      <span class="rc-mval-ov" id="val-children" style="left:29.33%;top:80.62%">—</span>
+      <div class="rc-bar-wrap"                    style="top:80.09%">
+        <span class="rc-lbl-ov" id="lbl-children"></span>
+        <div  class="rc-bar-fill" id="bar-children"></div>
+      </div>
+
+    </div><!-- /#report-card -->
+  </div>
+
+  <script src="js/calculate.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

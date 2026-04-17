@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSW — Registration</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/helvetica-neue-55" rel="stylesheet">
+
+  <style>
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #76A9E8;
+    --font: 'Space Mono', 'Courier New', monospace;
+  }
+
+  html, body {
+    background: #000000;
+    color: #ffffff;
+    font-family: var(--font);
+    font-size: 17.6px;
+    min-height: 100vh;
+  }
+
+  body {
+    opacity: 0;
+  }
+
+  /* ── HEADER ── */
+  .bsw-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: #1c1c1c;
+    border-bottom: 1px solid rgba(118, 169, 232, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+    z-index: 100;
+  }
+
+  .bsw-header .logo-img {
+    height: 30px;
+    width: auto;
+    display: block;
+    cursor: pointer;
+  }
+
+  .bsw-header .clock {
+    font-family: var(--font);
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+  }
+
+  /* ── PAGE BODY ── */
+  .page-body {
+    padding-top: calc(60px + 40px);
+    padding-bottom: 123px;
+    padding-left: 88px;
+    padding-right: 88px;
+  }
+
+  /* ── CASE ID ── */
+  .case-id {
+    font-family: var(--font);
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--blue);
+    margin-bottom: 28px;
+  }
+
+  /* ── INTRO TEXT ── */
+  .intro-text p {
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #B7B7B7;
+    margin-bottom: 16px;
+    max-width: 520px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(118, 169, 232, 0.3);
+    margin: 40px 0;
+  }
+
+  /* ── FORM GRID: evenly distributed across full width ── */
+  .form-grid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .form-col { flex: 1; }
+
+  /* ── COLUMN HEADER ── */
+  .form-col-label {
+    font-family: var(--font);
+    font-family: var(--font);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    white-space: nowrap;
+  }
+
+  /* ── RADIO GROUP ── */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-family: var(--font);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .radio-group input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1.5px solid #ffffff;
+    background: transparent;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .radio-group input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    inset: 2.5px;
+    border-radius: 50%;
+    background: #ffffff;
+  }
+
+  /* ── TEXT INPUTS ── */
+  .bsw-input {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+    font-family: var(--font);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    padding: 8px 11px;
+    outline: none;
+    display: block;
+    width: 75%;
+    max-width: 220px;
+    height: 40px;
+  }
+
+  /* Hide native dropdown arrow for select elements using the input style */
+  select.bsw-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+    background-repeat: no-repeat;
+    padding-right: 12px;
+  }
+
+  .bsw-input:focus {
+    border-color: #ffffff;
+  }
+
+  /* ── SUBMIT ROW ── */
+  .form-submit-row {
+    padding-top: 0;
+    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bsw-btn-submit {
+    background: transparent;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    font-family: var(--font);
+    font-family: var(--font);
+    font-size: 15.4px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 11.1px 32.5px;
+    cursor: pointer;
+  }
+
+  .bsw-btn-submit:hover {
+    background: var(--blue);
+    color: #000;
+  }
+
+  #form-error {
+    font-family: var(--font);
+    font-size: 13px;
+    color: #e07070;
+    margin-top: 14px;
+    letter-spacing: 0.04em;
+  }
+  </style>
+</head>
+<body data-page="form">
+
+  <header class="bsw-header">
+    <img class="logo-img" src="assets/Logo/Wordmark_Single_B.svg" alt="Bureau of Statistical Worth">
+    <div class="clock" id="clock">00:00:00 EST</div>
+  </header>
+
+  <div class="page-body">
+
+    <div class="case-id" id="case-id">CASE ID 000-000</div>
+
+    <div class="intro-text">
+      <p>Please complete your registration with current and accurate information. Thank you for doing your part to keep our community secure.</p>
+      <p>Assessment is mandatory for all individuals aged 18 years and older. Compliance ensures equity. The cycle is efficient. The data is completely comprehensive. Your cooperation is required.</p>
+    </div>
+
+    <hr class="divider">
+
+    <form id="assessment-form" novalidate>
+      <div class="form-grid">
+
+        <!-- SEX -->
+        <div class="form-col">
+          <div class="form-col-label">Sex</div>
+          <div class="radio-group">
+            <label><input type="radio" name="sex" value="Male"> Male</label>
+            <label><input type="radio" name="sex" value="Female"> Female</label>
+          </div>
+        </div>
+
+        <!-- RACE -->
+        <div class="form-col">
+          <div class="form-col-label">Race</div>
+          <div class="radio-group">
+            <label><input type="radio" name="race" value="White"> White</label>
+            <label><input type="radio" name="race" value="White (Hispanic)"> White (Hispanic)</label>
+            <label><input type="radio" name="race" value="Black"> Black</label>
+            <label><input type="radio" name="race" value="Hispanic"> Hispanic</label>
+            <label><input type="radio" name="race" value="Asian"> Asian</label>
+            <label><input type="radio" name="race" value="Native American"> Native American</label>
+            <label><input type="radio" name="race" value="Two or more"> Two or more</label>
+          </div>
+        </div>
+
+        <!-- AGE -->
+        <div class="form-col">
+          <div class="form-col-label">Age</div>
+          <input type="text" id="age" class="bsw-input" inputmode="numeric" maxlength="3">
+        </div>
+
+        <!-- PARENTS' INCOME -->
+        <div class="form-col">
+          <div class="form-col-label">Parents' Income</div>
+          <select id="parent-income" class="bsw-input">
+            <option value=""></option>
+            <option value="30000">Lowest income (up to $55,667)</option>
+            <option value="65000">Lower income ($55,668–$71,991)</option>
+            <option value="83000">Middle income ($71,992–$89,465)</option>
+            <option value="103000">Higher income ($89,466–$117,609)</option>
+            <option value="150000">Highest income (>$117,609)</option>
+          </select>
+        </div>
+
+        <!-- ZIP CODE -->
+        <div class="form-col">
+          <div class="form-col-label">Zip Code</div>
+          <input type="text" id="zip" class="bsw-input" inputmode="numeric" maxlength="5">
+        </div>
+
+      </div>
+
+      <hr class="divider" style="margin-top: 52px; margin-bottom: 0;">
+
+      <div class="form-submit-row">
+        <button type="submit" class="bsw-btn-submit">Submit Assessment</button>
+        <div id="form-error"></div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

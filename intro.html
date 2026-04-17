@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSW — Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/helvetica-neue-55" rel="stylesheet">
+
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #76A9E8;
+    --blue-border: rgba(118, 169, 232, 0.3);
+    --sm: 'Space Mono', 'Courier New', monospace;
+    --hv: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  html, body {
+    background: #000;
+    color: #fff;
+    font-family: var(--sm);
+    min-height: 100vh;
+  }
+
+  /* Intro page fade-in */
+  body {
+    opacity: 0;
+    transition: opacity 600ms ease-in-out;
+  }
+
+  /* ── HEADER ── */
+  .bsw-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: #1c1c1c;
+    border-bottom: 1px solid var(--blue-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+    z-index: 100;
+  }
+  .bsw-header .logo-img {
+    height: 30px;
+    width: auto;
+    display: block;
+    cursor: pointer;
+  }
+  .bsw-header .clock {
+    font-family: var(--sm);
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── PAGE BODY ── */
+  .page-body {
+    padding-top: calc(60px + 110px);
+    padding-bottom: 135px;
+    padding-left: 88px;
+    padding-right: 88px;
+    min-height: 100vh;
+  }
+
+  .case-id {
+    font-family: var(--sm);
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--blue);
+    margin-bottom: 17px;
+  }
+
+  .intro-text p {
+    font-family: var(--sm);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #B7B7B7;
+    margin-bottom: 16px;
+    max-width: 445px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #8B8B8B;
+    width: 445px;
+    margin: 35px 0 20px;
+  }
+
+  .fine-print {
+    font-family: var(--hv);
+    font-size: 10px;
+    color: #7C7C7C;
+    line-height: 1.6;
+    max-width: 445px;
+  }
+
+  /* Begin button */
+  .begin-btn-wrap {
+    position: fixed;
+    bottom: 48px;
+    right: 48px;
+  }
+  #begin-btn {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #000;
+    font-family: var(--sm);
+    font-size: 15.6px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+  #begin-btn:hover { opacity: 0.85; }
+
+  /* Countdown overlay */
+  #countdown-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .countdown-label {
+    font-family: var(--sm);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--blue);
+    text-transform: uppercase;
+  }
+  .countdown-number {
+    font-family: var(--sm);
+    font-size: 96px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1;
+  }
+  </style>
+</head>
+<body data-page="intro">
+
+  <header class="bsw-header">
+    <img class="logo-img" src="assets/Logo/Wordmark_Single_B.svg" alt="Bureau of Statistical Worth">
+    <div class="clock" id="clock">00:00:00 EST</div>
+  </header>
+
+  <div class="page-body">
+    <div class="case-id" id="case-id">CASE ID 000-000</div>
+
+    <div class="intro-text">
+      <p>Please complete your registration with current and accurate information. Thank you for doing your part to keep our community secure.</p>
+      <p>Assessment is mandatory for all individuals aged 18 years and older. Compliance ensures equity. The cycle is efficient. The data is completely comprehensive. Your cooperation is required.</p>
+    </div>
+
+    <hr class="divider">
+
+    <p class="fine-print">
+      Bureau of Statistical Worth assessments are conducted under Order 6202-B. Statistical Worth Scores are calculated using demographic indicators including but not limited to race, sex, age, zip code, parental income, projected lifetime earnings, crime risk index, health longevity estimates, and number of projected dependents. Score results may affect eligibility for public housing, educational funding, healthcare allocation, and federal assistance programs. The Bureau of Statistical Worth is not responsible for outcomes resulting from individual score determinations. Assessment methodology has been reviewed and approved by the Office of Demographic Efficiency. Scores are final. Appeals are not available at this time. Participation is mandatory for all individual over the age of 18 under federal law. Failure to comply may result in automatic score assignment. The Bureau of Statistical Worth is committed to fairness for all populations. Results are confidential except where shared with partnering federal, state, and municipal agencies.
+    </p>
+  </div>
+
+  <div class="begin-btn-wrap">
+    <button id="begin-btn">Begin</button>
+  </div>
+
+  <div id="countdown-overlay">
+    <div class="countdown-label">Proceeding automatically</div>
+    <div class="countdown-number">3</div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Fade the intro page in from dark
+    document.addEventListener('DOMContentLoaded', function(){
+      requestAnimationFrame(function(){ document.body.style.opacity = '1'; });
+    });
+  </script>
+</body>
+</html>

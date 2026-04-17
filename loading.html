@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSW — Processing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/helvetica-neue-55" rel="stylesheet">
+
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #76A9E8;
+    --blue-border: rgba(118, 169, 232, 0.3);
+    --sm: 'Space Mono', 'Courier New', monospace;
+    --hv: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  html, body {
+    background: #000;
+    color: var(--blue);
+    font-family: var(--sm);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .bsw-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: #1c1c1c;
+    border-bottom: 1px solid var(--blue-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+    z-index: 100;
+  }
+  .bsw-header .logo-img {
+    height: 30px;
+    width: auto;
+    display: block;
+    cursor: pointer;
+  }
+  .bsw-header .clock {
+    font-family: var(--sm);
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CENTERED COUNTDOWN ── */
+  .loading-wrap {
+    position: absolute;
+    inset: 0;
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .loading-label {
+    font-family: var(--sm);
+    font-size: 15.4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(200, 200, 200, 0.7);
+    margin-bottom: 36px;
+  }
+
+  .countdown-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .cnt {
+    font-family: var(--sm);
+    font-size: 15.4px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: rgba(200, 200, 200, 0.18);
+    transition: color 0.5s ease;
+  }
+
+  .cnt.active {
+    color: rgba(200, 200, 200, 0.88);
+  }
+
+  .loading-sub {
+    margin-top: 36px;
+    font-family: var(--sm);
+    font-size: 15.4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(200, 200, 200, 0.5);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .loading-sub.visible { opacity: 1; }
+  </style>
+</head>
+<body data-page="loading">
+
+  <header class="bsw-header">
+    <img class="logo-img" src="assets/Logo/Wordmark_Single_B.svg" alt="Bureau of Statistical Worth">
+    <div class="clock" id="clock">00:00:00 EST</div>
+  </header>
+
+  <div class="loading-wrap">
+    <div class="loading-label">Assessment Complete</div>
+    <div class="countdown-row">
+      <span class="cnt" id="cnt-3">3…</span>
+      <span class="cnt" id="cnt-2">2…</span>
+      <span class="cnt" id="cnt-1">1…</span>
+    </div>
+    <div class="loading-sub" id="loading-sub">Generating Report Card</div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
